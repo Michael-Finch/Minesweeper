@@ -15,7 +15,6 @@ package minesweeperplayer;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 
 public class CellGraphic extends StackPane{
     CustomRectangle customRectangle;

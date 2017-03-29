@@ -13,14 +13,11 @@ package minesweeperplayer;
 
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.Screen;
 
 public class GamePane extends VBox{
@@ -48,8 +45,8 @@ public class GamePane extends VBox{
     final int MINE = 3;
     
     //Measures of how many pixels a cell
-    final int CELL_CENTER_SIZE = 16;
-    final int CELL_BORDER_SIZE = 0;
+    final int CELL_CENTER_SIZE = 15;
+    final int CELL_BORDER_SIZE = 1;
     
     GamePane(Board boardUsed){
         this.board = boardUsed;
@@ -60,7 +57,6 @@ public class GamePane extends VBox{
         }
         else{
             scrollPane = new ScrollPane(mainPane);
-
             scrollPane.setPrefSize(scrollPaneSize, scrollPaneSize);
             this.getChildren().addAll(topPane, scrollPane);
         }
@@ -90,6 +86,7 @@ public class GamePane extends VBox{
                 artArray[i][j].setLayoutY(i * CELL_CENTER_SIZE);
                 
                 mainPane.getChildren().add(artArray[i][j]);
+                
             }
         }
         
@@ -112,6 +109,9 @@ public class GamePane extends VBox{
             }
             else if(e.getButton() == MouseButton.SECONDARY){
                 flagCell(row, column);
+            }
+            else if(e.getButton() == MouseButton.MIDDLE){
+                System.out.println(scrollPane.getViewportBounds().toString());
             }
         });
         updateLabel();
@@ -312,24 +312,16 @@ public class GamePane extends VBox{
     public void gameOver(){
         for (int row = 0; row < board.getHeight(); row++) {
             for (int column = 0; column < board.getWidth(); column++) {
+                board.getCell(row, column).setHidden(false);
                 if (board.getCell(row, column).getState() == MINE) {
                     artArray[row][column].drawMine();
-
                     mainPane.getChildren().remove(artArray[row][column]);
                     mainPane.getChildren().add(artArray[row][column]);
-                    board.getCell(row, column).setHidden(false);
                     board.setMinesUnflagged(board.getMinesUnflagged() - 1);
-                    updateLabel();
-                }
-                else{
-                    board.getCell(row, column).setFlagged(false);
-                    if(board.getCell(row, column).isFlagged()){
-                        artArray[row][column].drawFlag(false);
-                    }
-                    artArray[row][column].redraw();
-                    board.getCell(row, column).setHidden(false);
                 }
             }
         }
+        board.setMinesUnflagged(0);
+        updateLabel();
     }
 }

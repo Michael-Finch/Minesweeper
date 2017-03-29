@@ -14,7 +14,6 @@ package minesweeperplayer;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Board {
@@ -40,16 +39,17 @@ public class Board {
         this.gameBoard = getFileBoard(file);
     }
     
+    //Method to create a rowsXcolumns board surrounded by a border of walls
     Board(int rows, int columns, int mines){
         numberOfMines = mines;
         minesUnflagged = numberOfMines;
         Cell[][] board;
-        board = new Cell[rows][columns];
+        board = new Cell[rows + 2][columns + 2];
         
         //Create the walls and empty cells
-        for(int i = 0; i < rows; i++){
-            for(int j = 0; j < columns; j++){
-                if(i == 0 || i == rows - 1 || j == 0 || j == columns - 1){
+        for(int i = 0; i < rows + 2; i++){
+            for(int j = 0; j < columns + 2; j++){
+                if(i == 0 || i == rows + 1 || j == 0 || j == columns + 1){
                     board[i][j] = new Cell(WALL, .25, .25, .25);
                 }
                 else{
