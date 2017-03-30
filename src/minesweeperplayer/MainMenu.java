@@ -15,6 +15,7 @@ package minesweeperplayer;
 import java.io.File;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
@@ -38,17 +39,15 @@ public class MainMenu extends VBox{
     
     Label labelRows = new Label("Standard Map Rows: ");
     TextField textRows = new TextField("10");
-    //HBox containerRows = new HBox(labelRows, textRows);
             
     Label labelColumns = new Label("Standard Map Columns: ");
     TextField textColumns = new TextField("10");
-    //HBox containerColumns = new HBox(labelColumns, textColumns);
     
     Label labelMines = new Label("Standard Map Mines: ");
     TextField textMines = new TextField("10");
-    //HBox containerMines = new HBox(labelMines, textMines);
     
-    //VBox containerOptions = new VBox(labelOptions, containerRows, containerColumns, containerMines);
+    CheckBox checkGridlines = new CheckBox("Gridlines");
+    
     GridPane containerOptions = new GridPane();
     
     public MainMenu() {
@@ -58,10 +57,12 @@ public class MainMenu extends VBox{
         
         containerOptions.add(labelOptions, 0, 0);
         containerOptions.add(labelRows, 0, 1);
-        containerOptions.add(textRows, 1, 1);
         containerOptions.add(labelColumns, 0, 2);
-        containerOptions.add(textColumns, 1, 2);
         containerOptions.add(labelMines, 0, 3);
+        containerOptions.add(checkGridlines, 0, 4);
+        
+        containerOptions.add(textRows, 1, 1);
+        containerOptions.add(textColumns, 1, 2);
         containerOptions.add(textMines, 1, 3);
         containerOptions.setVgap(5);
         
@@ -81,7 +82,16 @@ public class MainMenu extends VBox{
                 System.out.println(ex);
                 defaultBoard = new Board(9, 9, 10);
             }
-            MinesweeperPane defaultGame = new MinesweeperPane(defaultBoard);
+            MinesweeperPane defaultGame;
+            
+            //Determine gridlines or no gridlines
+            if(checkGridlines.selectedProperty().get() == true){
+                defaultGame = new MinesweeperPane(defaultBoard, 1);
+            }
+            else{
+                defaultGame = new MinesweeperPane(defaultBoard, 0);
+            }
+            
             Scene scene = new Scene(defaultGame);
             gameStage.setScene(scene);
             gameStage.show();
@@ -96,7 +106,16 @@ public class MainMenu extends VBox{
                     System.out.println("File");
                     Board fileBoard = new Board(file);
                     System.out.println("FileBoard Created\n");
-                    MinesweeperPane fileGame = new MinesweeperPane(fileBoard);
+                    MinesweeperPane fileGame;
+                    
+                    //Determine gridlines or no gridlines
+                    if(checkGridlines.selectedProperty().get() == true){
+                        fileGame = new MinesweeperPane(fileBoard, 1);
+                    }
+                    else{
+                        fileGame = new MinesweeperPane(fileBoard, 0);
+                    }
+                    
                     System.out.println("MinesweeperPane Created");
                     Scene scene = new Scene(fileGame);
                     System.out.println("Scene Created");
